@@ -1,5 +1,13 @@
+
+interface Enchantment {
+  prefix: string;
+  attribute: string;
+}
+
+type Enchantments = Record<string, Enchantment>;
+
 describe('Weapon enchanting', () => {
-  const defaultEnchantments = {
+  const defaultEnchantments: Enchantments = {
     'ice': {
       'prefix': 'Icy',
       'attribute': '+5 ice damage'
@@ -88,13 +96,17 @@ describe('Weapon enchanting', () => {
   });
 });
 
-const enchant = enchantments => weapon => {
+const enchant = (enchantments: Enchantments) => weapon => {
+  const availableEnchantments = Object
+    .values(enchantments)
+    .filter(({ prefix }) => prefix !== weapon.enchantment?.prefix);
+
   return {
     ...weapon,
-    enchantment: Object.values(enchantments)[0]
+    enchantment: availableEnchantments[0]
   };
 };
-function setupEnchanter({ enchantments }: { enchantments: any; }) {
+function setupEnchanter({ enchantments }: { enchantments: Enchantments; }) {
   return {
     enchant: enchant(enchantments)
   };
