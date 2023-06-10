@@ -1,5 +1,3 @@
-import { before } from 'node:test';
-
 interface Enchantment {
   prefix: string;
   attribute: string;
