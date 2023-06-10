@@ -70,6 +70,8 @@ describe('Weapon enchanting', () => {
     expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
   });
 
+  it.todo('The enchantments are chosen at random');
+
   it.skip('adds the name of the enchantment to the item\'s name', () => {
     // const weapon = {
     //   name: 'Dagger of the Nooblet',
