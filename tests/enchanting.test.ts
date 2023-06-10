@@ -126,9 +126,11 @@ const enchant = (enchantments: Enchantments) => weapon => {
     .values(enchantments)
     .filter(({ prefix }) => prefix !== weapon.enchantment?.prefix);
 
+  const randomEnchantmentIndex = Math.floor(Math.random() * availableEnchantments.length);
+
   return {
     ...weapon,
-    enchantment: availableEnchantments[Math.floor(Math.random() * availableEnchantments.length)]
+    enchantment: availableEnchantments[randomEnchantmentIndex]
   };
 };
 function setupEnchanter({ enchantments }: { enchantments: Enchantments; }) {
