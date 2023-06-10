@@ -30,6 +30,11 @@ describe('Weapon enchanting', () => {
     }
   };
 
+  function expectAnyEnchantment(weaponEnchantedOnce: any) {
+    expect(weaponEnchantedOnce.enchantment)
+      .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
+  }
+
   it('given a non-enchanted weapon, it enchants the weapon with one of the available enchantments', () => {
     const weapon = {
       name: 'Dagger of the Nooblet',
@@ -65,15 +70,13 @@ describe('Weapon enchanting', () => {
 
     const weaponEnchantedOnce = enchanter.enchant(weapon);
 
-    expect(weaponEnchantedOnce.enchantment)
-      .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
+    expectAnyEnchantment(weaponEnchantedOnce);
 
     // when
     const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
 
     // then
-    expect(weaponEnchantedTwice.enchantment)
-      .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
+    expectAnyEnchantment(weaponEnchantedTwice);
 
     expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
   });
