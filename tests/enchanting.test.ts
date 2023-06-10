@@ -59,7 +59,23 @@ describe('Weapon enchanting', () => {
       });
     });
 
-    it.todo('chooses a random enchantment');
+    it('chooses a random enchantment', () => {
+      // given
+      const weapon = {
+        name: 'Dagger of the Nooblet',
+      };
+
+      const enchanter = setupEnchanter({
+        enchantments: defaultEnchantments
+      });
+
+      // when
+      const enchantedWeaponAttemptOne = enchanter.enchant(weapon);
+      const enchantedWeaponAttemptTwo = enchanter.enchant(weapon);
+
+      // then
+      expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
+    });
   });
 
   describe('given an enchanted weapon', () => {
