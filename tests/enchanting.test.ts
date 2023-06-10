@@ -128,7 +128,7 @@ const enchant = (enchantments: Enchantments) => weapon => {
 
   return {
     ...weapon,
-    enchantment: availableEnchantments[0]
+    enchantment: availableEnchantments[Math.floor(Math.random() * availableEnchantments.length)]
   };
 };
 function setupEnchanter({ enchantments }: { enchantments: Enchantments; }) {
