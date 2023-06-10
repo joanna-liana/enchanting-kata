@@ -35,53 +35,59 @@ describe('Weapon enchanting', () => {
       .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
   }
 
-  it('given a non-enchanted weapon, it enchants the weapon with one of the available enchantments', () => {
-    const weapon = {
-      name: 'Dagger of the Nooblet',
-    };
+  describe('given a non-enchanted weapon', () => {
+    it('it enchants the weapon with one of the available enchantments', () => {
+      const weapon = {
+        name: 'Dagger of the Nooblet',
+      };
 
-    const enchantedWeapon = setupEnchanter({
-      enchantments: {
-        'fire': {
+      const enchantedWeapon = setupEnchanter({
+        enchantments: {
+          'fire': {
+            'prefix': 'Inferno',
+            'attribute': '+5 fire damage'
+          }
+        }
+      }).enchant(weapon);
+
+      expect(enchantedWeapon).toStrictEqual({
+        ...weapon,
+        enchantment: {
           'prefix': 'Inferno',
           'attribute': '+5 fire damage'
         }
-      }
-    }).enchant(weapon);
-
-    expect(enchantedWeapon).toStrictEqual({
-      ...weapon,
-      enchantment: {
-        'prefix': 'Inferno',
-        'attribute': '+5 fire damage'
-      }
-    });
-  });
-
-  it('given an enchanted weapon, it enchants the weapon with another enchantment', () => {
-    // given
-    const weapon = {
-      name: 'Dagger of the Nooblet',
-    };
-
-    const enchanter = setupEnchanter({
-      enchantments: defaultEnchantments
+      });
     });
 
-    const weaponEnchantedOnce = enchanter.enchant(weapon);
-
-    expectAnyEnchantment(weaponEnchantedOnce);
-
-    // when
-    const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
-
-    // then
-    expectAnyEnchantment(weaponEnchantedTwice);
-
-    expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
+    it.todo('chooses a random enchantment');
   });
 
-  it.todo('The enchantments are chosen at random');
+  describe('given an enchanted weapon', () => {
+    it('it enchants the weapon with another enchantment', () => {
+      // given
+      const weapon = {
+        name: 'Dagger of the Nooblet',
+      };
+
+      const enchanter = setupEnchanter({
+        enchantments: defaultEnchantments
+      });
+
+      const weaponEnchantedOnce = enchanter.enchant(weapon);
+
+      expectAnyEnchantment(weaponEnchantedOnce);
+
+      // when
+      const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
+
+      // then
+      expectAnyEnchantment(weaponEnchantedTwice);
+
+      expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
+    });
+
+    it.todo('chooses a random enchantment');
+  });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
     // const weapon = {
