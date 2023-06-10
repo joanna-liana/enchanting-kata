@@ -1,3 +1,4 @@
+import { before } from 'node:test';
 
 interface Enchantment {
   prefix: string;
@@ -79,20 +80,23 @@ describe('Weapon enchanting', () => {
   });
 
   describe('given an enchanted weapon', () => {
-    it('it enchants the weapon with another enchantment', () => {
-      // given
-      const weapon = {
-        name: 'Dagger of the Nooblet',
-      };
+    const weapon = {
+      name: 'Dagger of the Nooblet',
+    };
 
-      const enchanter = setupEnchanter({
+    let weaponEnchantedOnce;
+    let enchanter;
+
+    beforeEach(() => {
+      enchanter = setupEnchanter({
         enchantments: defaultEnchantments
       });
 
-      const weaponEnchantedOnce = enchanter.enchant(weapon);
-
+      weaponEnchantedOnce = enchanter.enchant(weapon);
       expectAnyEnchantment(weaponEnchantedOnce);
+    });
 
+    it('it enchants the weapon with another enchantment', () => {
       // when
       const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
 
