@@ -1,5 +1,5 @@
 describe('Weapon enchanting', () => {
-  const enchantments = {
+  const defaultEnchantments = {
     'ice': {
       'prefix': 'Icy',
       'attribute': '+5 ice damage'
@@ -43,6 +43,31 @@ describe('Weapon enchanting', () => {
         'attribute': '+5 fire damage'
       }
     });
+  });
+
+  it('given an enchanted weapon, it enchants the weapon with another enchantment', () => {
+    // given
+    const weapon = {
+      name: 'Dagger of the Nooblet',
+    };
+
+    const enchanter = setupEnchanter({
+      enchantments: defaultEnchantments
+    });
+
+    const weaponEnchantedOnce = enchanter.enchant(weapon);
+
+    expect(weaponEnchantedOnce.enchantment)
+      .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
+
+    // when
+    const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
+
+    // then
+    expect(weaponEnchantedTwice.enchantment)
+      .toStrictEqual({ prefix: expect.any(String), attribute: expect.any(String) });
+
+    expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
   });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
