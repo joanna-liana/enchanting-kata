@@ -114,6 +114,8 @@ describe('Weapon enchanting', () => {
       // then
       expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
     });
+
+    it.todo('may remove the existing enchantment');
   });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
