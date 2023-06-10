@@ -96,7 +96,7 @@ describe('Weapon enchanting', () => {
       expectAnyEnchantment(weaponEnchantedOnce);
     });
 
-    it('it enchants the weapon with another enchantment', () => {
+    it('enchants the weapon with another enchantment', () => {
       // when
       const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
 
@@ -106,7 +106,14 @@ describe('Weapon enchanting', () => {
       expect(weaponEnchantedTwice.enchantment).not.toStrictEqual(weaponEnchantedOnce.enchantment);
     });
 
-    it.todo('chooses a random enchantment');
+    it('chooses a random enchantment', () => {
+      // when
+      const enchantedWeaponAttemptOne = enchanter.enchant(weaponEnchantedOnce);
+      const enchantedWeaponAttemptTwo = enchanter.enchant(weaponEnchantedOnce);
+
+      // then
+      expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
+    });
   });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
