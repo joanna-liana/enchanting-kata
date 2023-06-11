@@ -144,6 +144,14 @@ const enchant = (
     enchantmentLossProbability?: number;
   }
 ) => weapon => {
+  const shouldLoseEnchantment = (probability: number) => Math.random() < probability;
+
+  if (shouldLoseEnchantment(enchantmentLossProbability)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { enchantment, ...weaponWithoutEnchantment } = weapon;
+
+    return weaponWithoutEnchantment;
+  }
 
   const availableEnchantments = Object
     .values(enchantments)
