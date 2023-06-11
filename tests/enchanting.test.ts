@@ -110,16 +110,22 @@ describe('Weapon enchanting', () => {
       expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
     });
 
-    it('may remove the existing enchantment', () => {
-      magicBook = MagicBook({
-        enchantments: defaultEnchantments,
-        enchantmentLossProbability: 1
-      });
+    it.each([
+      { enchantmentLossProbability: 1, hasPreservedEnchantment: false },
+      { enchantmentLossProbability: 0, hasPreservedEnchantment: true },
+    ])(
+      'may remove the existing enchantment - probability $enchantmentLossProbability',
+      ({ enchantmentLossProbability, hasPreservedEnchantment }) => {
+        magicBook = MagicBook({
+          enchantments: defaultEnchantments,
+          enchantmentLossProbability
+        });
 
-      const reEnchantedWeapon = magicBook.enchant(weaponEnchantedOnce);
+        const reEnchantedWeapon = magicBook.enchant(weaponEnchantedOnce);
 
-      expect(reEnchantedWeapon.enchantment).toBeFalsy();
-    });
+        expect(!!reEnchantedWeapon.enchantment).toBe(hasPreservedEnchantment);
+      }
+    );
   });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
