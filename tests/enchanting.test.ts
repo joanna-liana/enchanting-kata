@@ -40,14 +40,14 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const enchantedWeapon = setupEnchanter({
-        enchantments: {
+      const enchantedWeapon = magicBook
+        .withEnchantments({
           'fire': {
             'prefix': 'Inferno',
             'attribute': '+5 fire damage'
           }
-        }
-      }).enchant(weapon);
+        })
+        .enchant(weapon);
 
       expect(enchantedWeapon).toStrictEqual({
         ...weapon,
@@ -64,9 +64,7 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const enchanter = setupEnchanter({
-        enchantments: defaultEnchantments
-      });
+      const enchanter = magicBook.withEnchantments(defaultEnchantments);
 
       // when
       const enchantedWeaponAttemptOne = enchanter.enchant(weapon);
@@ -86,9 +84,7 @@ describe('Weapon enchanting', () => {
     let enchanter;
 
     beforeEach(() => {
-      enchanter = setupEnchanter({
-        enchantments: defaultEnchantments
-      });
+      enchanter = magicBook.withEnchantments(defaultEnchantments);
 
       weaponEnchantedOnce = enchanter.enchant(weapon);
       expectAnyEnchantment(weaponEnchantedOnce);
@@ -144,8 +140,9 @@ const enchant = (enchantments: Enchantments) => weapon => {
     enchantment: availableEnchantments[randomEnchantmentIndex]
   };
 };
-function setupEnchanter({ enchantments }: { enchantments: Enchantments; }) {
-  return {
+
+const magicBook = {
+  withEnchantments: (enchantments: Enchantments) => ({
     enchant: enchant(enchantments)
-  };
-}
+  })
+};
