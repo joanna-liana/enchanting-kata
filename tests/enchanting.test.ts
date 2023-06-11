@@ -40,13 +40,14 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const enchantedWeapon = magicBook
-        .withEnchantments({
+      const enchantedWeapon = MagicBook({
+        enchantments: {
           'fire': {
             'prefix': 'Inferno',
             'attribute': '+5 fire damage'
           }
-        })
+        }
+      })
         .enchant(weapon);
 
       expect(enchantedWeapon).toStrictEqual({
@@ -64,11 +65,11 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const enchanter = magicBook.withEnchantments(defaultEnchantments);
+      const magicBook = MagicBook({ enchantments: defaultEnchantments });
 
       // when
-      const enchantedWeaponAttemptOne = enchanter.enchant(weapon);
-      const enchantedWeaponAttemptTwo = enchanter.enchant(weapon);
+      const enchantedWeaponAttemptOne = magicBook.enchant(weapon);
+      const enchantedWeaponAttemptTwo = magicBook.enchant(weapon);
 
       // then
       expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
@@ -81,18 +82,18 @@ describe('Weapon enchanting', () => {
     };
 
     let weaponEnchantedOnce;
-    let enchanter;
+    let magicBook;
 
     beforeEach(() => {
-      enchanter = magicBook.withEnchantments(defaultEnchantments);
+      magicBook = MagicBook({ enchantments: defaultEnchantments });
 
-      weaponEnchantedOnce = enchanter.enchant(weapon);
+      weaponEnchantedOnce = magicBook.enchant(weapon);
       expectAnyEnchantment(weaponEnchantedOnce);
     });
 
     it('enchants the weapon with another enchantment', () => {
       // when
-      const weaponEnchantedTwice = enchanter.enchant(weaponEnchantedOnce);
+      const weaponEnchantedTwice = magicBook.enchant(weaponEnchantedOnce);
 
       // then
       expectAnyEnchantment(weaponEnchantedTwice);
@@ -102,14 +103,23 @@ describe('Weapon enchanting', () => {
 
     it('chooses a random enchantment', () => {
       // when
-      const enchantedWeaponAttemptOne = enchanter.enchant(weaponEnchantedOnce);
-      const enchantedWeaponAttemptTwo = enchanter.enchant(weaponEnchantedOnce);
+      const enchantedWeaponAttemptOne = magicBook.enchant(weaponEnchantedOnce);
+      const enchantedWeaponAttemptTwo = magicBook.enchant(weaponEnchantedOnce);
 
       // then
       expect(enchantedWeaponAttemptOne.enchantment).not.toStrictEqual(enchantedWeaponAttemptTwo.enchantment);
     });
 
-    it.todo('may remove the existing enchantment');
+    it('may remove the existing enchantment', () => {
+      magicBook = MagicBook({
+        enchantments: defaultEnchantments,
+        enchantmentLossProbability: 1
+      });
+
+      const reEnchantedWeapon = magicBook.enchant(weaponEnchantedOnce);
+
+      expect(reEnchantedWeapon.enchantment).toBeFalsy();
+    });
   });
 
   it.skip('adds the name of the enchantment to the item\'s name', () => {
@@ -128,7 +138,13 @@ describe('Weapon enchanting', () => {
   });
 });
 
-const enchant = (enchantments: Enchantments) => weapon => {
+const enchant = (
+  { enchantmentLossProbability = 0, enchantments }: {
+    enchantments: Enchantments;
+    enchantmentLossProbability?: number;
+  }
+) => weapon => {
+
   const availableEnchantments = Object
     .values(enchantments)
     .filter(({ prefix }) => prefix !== weapon.enchantment?.prefix);
@@ -141,8 +157,9 @@ const enchant = (enchantments: Enchantments) => weapon => {
   };
 };
 
-const magicBook = {
-  withEnchantments: (enchantments: Enchantments) => ({
-    enchant: enchant(enchantments)
-  })
-};
+const MagicBook = (props: {
+  enchantments: Enchantments;
+  enchantmentLossProbability?: number;
+}) => ({
+  enchant: enchant(props)
+});
