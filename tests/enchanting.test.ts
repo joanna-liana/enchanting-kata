@@ -1,9 +1,4 @@
-interface Enchantment {
-  prefix: string;
-  attribute: string;
-}
-
-type Enchantments = Record<string, Enchantment>;
+import { Enchantments, MagicBook } from './MagicBook';
 
 describe('Weapon enchanting', () => {
   const defaultEnchantments: Enchantments = {
@@ -40,7 +35,7 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const enchantedWeapon = MagicBook({
+      const enchantedWeapon = new MagicBook({
         enchantments: {
           'fire': {
             'prefix': 'Inferno',
@@ -65,7 +60,7 @@ describe('Weapon enchanting', () => {
         name: 'Dagger of the Nooblet',
       };
 
-      const magicBook = MagicBook({ enchantments: defaultEnchantments });
+      const magicBook = new MagicBook({ enchantments: defaultEnchantments });
 
       // when
       const enchantedWeaponAttemptOne = magicBook.enchant(weapon);
@@ -82,10 +77,10 @@ describe('Weapon enchanting', () => {
     };
 
     let weaponEnchantedOnce;
-    let magicBook;
+    let magicBook: MagicBook;
 
     beforeEach(() => {
-      magicBook = MagicBook({ enchantments: defaultEnchantments });
+      magicBook = new MagicBook({ enchantments: defaultEnchantments });
 
       weaponEnchantedOnce = magicBook.enchant(weapon);
       expectAnyEnchantment(weaponEnchantedOnce);
@@ -116,7 +111,7 @@ describe('Weapon enchanting', () => {
     ])(
       'may remove the existing enchantment - probability $enchantmentLossProbability',
       ({ enchantmentLossProbability, hasPreservedEnchantment }) => {
-        magicBook = MagicBook({
+        magicBook = new MagicBook({
           enchantments: defaultEnchantments,
           enchantmentLossProbability
         });
@@ -142,38 +137,4 @@ describe('Weapon enchanting', () => {
 
     // expect(enchantedWeapon.name).toBe('Inferno Dagger of the Nooblet');
   });
-});
-
-const enchant = (
-  { enchantmentLossProbability = 0, enchantments }: {
-    enchantments: Enchantments;
-    enchantmentLossProbability?: number;
-  }
-) => weapon => {
-  const shouldLoseEnchantment = (probability: number) => Math.random() < probability;
-
-  if (shouldLoseEnchantment(enchantmentLossProbability)) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { enchantment, ...weaponWithoutEnchantment } = weapon;
-
-    return weaponWithoutEnchantment;
-  }
-
-  const availableEnchantments = Object
-    .values(enchantments)
-    .filter(({ prefix }) => prefix !== weapon.enchantment?.prefix);
-
-  const randomEnchantmentIndex = Math.floor(Math.random() * availableEnchantments.length);
-
-  return {
-    ...weapon,
-    enchantment: availableEnchantments[randomEnchantmentIndex]
-  };
-};
-
-const MagicBook = (props: {
-  enchantments: Enchantments;
-  enchantmentLossProbability?: number;
-}) => ({
-  enchant: enchant(props)
 });
