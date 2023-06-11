@@ -54,6 +54,7 @@ describe('Weapon enchanting', () => {
       });
     });
 
+    // TODO: fix the flakiness
     it('chooses a random enchantment', () => {
       // given
       const weapon = {
@@ -64,6 +65,7 @@ describe('Weapon enchanting', () => {
 
       // when
       const enchantedWeaponAttemptOne = magicBook.enchant(weapon);
+      // TODO: this could still get the same enchantment
       const enchantedWeaponAttemptTwo = magicBook.enchant(weapon);
 
       // then
